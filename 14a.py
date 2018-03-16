@@ -64,26 +64,36 @@ for row in range(0, 128):
     binary = [s for s in hex2bin(hash).replace("0", ".").replace("1", "#")]
     grid.append(binary)
 
+#for row in grid[0:8]:
+#    for cell in row[0:8]:
+#        sys.stdout.write(cell)
+#    sys.stdout.write("\n")
+#sys.stdout.flush()
 #for row in grid: print row
+
+def neighbors(y,x):
+    result = []
+    if y > 0: result.append((y-1, x))
+    if y < 127: result.append((y+1, x))
+    if x > 0: result.append((y, x-1))
+    if x < 127: result.append((y, x+1))
+    return result
+
+def flood_fill(grid, sy, sx, group):
+    candidates = neighbors(sy,sx)
+    grid[sy][sx] = group
+    while len(candidates) > 0:
+        (y,x) = candidates.pop()
+        if grid[y][x] == "#":
+            grid[y][x] = group
+            candidates += neighbors(y,x)
 
 last_group = 0
 for y in range(0, 128):
     for x in range(0, 128):
         if grid[y][x] == "#":
-            print y, x, grid[y][x], grid[y-1][x]
-            if y > 0 and grid[y-1][x] not in (".", "#"):
-                grid[y][x] = grid[y-1][x]
-                print ">", grid[y][x], grid[y-1][x]
-            #if y < 127 and grid[y+1][x] not in (".", "#"):
-            #    grid[y][x] = grid[y+1][x]
-            if x > 0 and grid[y][x-1] not in (".", "#"):
-                grid[y][x] = grid[y][x-1]
-            #if x < 127 and grid[y][x+1] not in (".", "#"):
-            #    grid[y][x] = grid[y][x+1]
-            if grid[y][x] == "#":
-                last_group += 1
-                grid[y][x] = last_group
-                print "#", grid[y][x] 
+            last_group += 1
+            flood_fill(grid, y, x, last_group)
 
 #for row in grid: print row
 
@@ -91,6 +101,8 @@ for row in grid[0:8]:
     for cell in row[0:8]:
         if cell == ".":
             sys.stdout.write(".")
+        elif cell == "#":
+            raise Exception("# " + str(cell) + " " + str(row))
         else:
             sys.stdout.write(str(cell%10))
     sys.stdout.write("\n")
