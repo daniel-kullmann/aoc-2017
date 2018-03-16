@@ -47,11 +47,21 @@ def knot_hash(ring, input):
     return encode(dense_hash(result))
     
 def hex2bin(hex):
-    value = bin(int(hex, 16))[2:])
-    while len(value)
+    value = bin(int(hex, 16))[2:]
+    while len(value) < 128:
+        value = "0" + value
+    return value
 
 input = "amgozmfv"
-input = "flqrgnkx"
+#input = "flqrgnkx"
+used = 0
 for row in range(0, 128):
-    hash = knot_hash(input+"-"+str(row))
-    print hash
+    data = input+"-"+str(row)
+    data = [ord(s) for s in data] + [17, 31, 73, 47, 23]
+    ring = range(0,256)
+    hash = knot_hash(ring, data)
+    binary = hex2bin(hash)
+    used += len(filter(lambda x: x == "1", binary))
+    if row < 8:
+        print binary[0:8]
+print used
