@@ -1,13 +1,16 @@
 skip = 354
+#skip = 3
 
-buffer = [0]
 position = 0
+numberAfterZero = None
 
 for n in range(1, 50000000+1):
     position += skip
-    position %= len(buffer)
-    buffer = buffer[:position+1] + [n] + buffer[position+1:]
-    #print buffer
+    position %= n # n is size of old buffer
+    # number is inserted after position
+    if position == 0:
+        numberAfterZero = n
     position += 1
+    #if n > 10: break
 
-print buffer[buffer.index(0)+1]
+print numberAfterZero
