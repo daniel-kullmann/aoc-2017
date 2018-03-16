@@ -1,7 +1,7 @@
 import re
 
 #p=<1609,-863,-779>, v=<-15,54,-69>, a=<-10,0,14>
-REGEX = re.compile(r"p=<([-,0-9]+)>, v=<(([-,0-9]+))>, a=<(([-,0-9]+))>")
+REGEX = re.compile(r"p=<([-,0-9]+)>, v=<([-,0-9]+)>, a=<([-,0-9]+)>")
 
 def parse(input):
     result = []
@@ -12,7 +12,7 @@ def parse(input):
             position = map(int, match.group(1).split(","))
             velocity = map(int, match.group(2).split(","))
             acceleration = map(int, match.group(3).split(","))
-            result.append([sum(map(abs,acceleration)), position, velocity, acceleration, p_no])
+            result.append([0, position, velocity, acceleration, p_no])
         else:
             raise Exception("parse " + item)
         p_no += 1
@@ -24,16 +24,14 @@ fh.close()
 particles = parse(input)
 
 
-particles.sort(key=lambda x: x[0])
-for p in particles[0:10]: print p[4], p[0], sum(map(abs,p[1]))
+particles.sort(key=lambda x: sum(map(abs,x[3])))
+for p in particles[0:10]: print p
 import sys
 sys.exit(1)
 
 cycle=0
 while True:
-    got_better = 0
     for p in particles:
-        current_distance = p[0]
         position = p[1]
         velocity = p[2]
         acceleration = p[3]
@@ -48,13 +46,12 @@ while True:
         p[1] = position
         
         new_distance = sum(map(abs, position))
-        print number, current_distance, new_distance
-        if new_distance<current_distance:
-            got_better += 1
-            p[0] = new_distance
+        #print number, new_distance
+        p[0] = new_distance
     cycle+=1
-    print got_better
-    if got_better == 0:
-        break
+    if cycle>20000: break
 
 print cycle
+
+particles.sort(key=lambda x: x[0])
+for p in particles[0:10]: print p
