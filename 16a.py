@@ -51,6 +51,8 @@ state = [s for s in "abcdefghijklmnop"]
 while n < 1000*1000*1000:
     n+=1
     state = [state[p] for p in permutation]
-    if n % 1000000 == 0: sys.stdout.write("."); sys.stdout.flush()
+
 
 print "".join(state)
+
+# kblheigpmjdafnoc is the wrong answer
