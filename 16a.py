@@ -58,12 +58,25 @@ permutation = calculate_permutation(state, dance)
 
 n = 0
 state = initial_state()
-while n < 1000*1000*1000:
-    n+=1
+seen = ["".join(state)]
+reps = 1000*1000*1000
+while n < reps:
     state = [state[p] for p in permutation]
-    #print "".join(state)
+    key = "".join(state)
+    n += 1
+    if key in seen:
+        print "found", n, len(seen), seen.index(key), seen[seen.index(key)], seen[reps % n], seen[reps % (n-1)]
+        break
+    seen.append(key)
+    print n, key
+    
     #if n > 2: break
 
 print "".join(state)
+cycle_length = len(seen)
+print cycle_length
+print reps % cycle_length
+print seen[reps % cycle_length]
 
 # kblheigpmjdafnoc is the wrong answer
+# hklecbpnjigoafmd is the correct answer
