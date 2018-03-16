@@ -7,6 +7,7 @@ height = len(maze)
 width = len(maze[0])
 direction = "s"
 letters = []
+steps = 0
 
 while True:
     spot = maze[y][x]
@@ -72,6 +73,7 @@ while True:
             raise Exception("state " + str((direction,x,y,spot)))
     else:
         raise Exception("state " + str((direction,x,y,spot)))
-        
+    steps += 1
 
 print "".join(letters)
+print steps
