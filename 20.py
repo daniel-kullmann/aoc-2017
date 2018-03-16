@@ -10,9 +10,9 @@ def parse(input):
         match = REGEX.match(item.strip())
         if match != None:
             position = map(int, match.group(1).split(","))
-            velocity = map(int, match.group(1).split(","))
-            acceleration = map(int, match.group(1).split(","))
-            result.append([sum(map(abs,position)), position, velocity, acceleration, p_no])
+            velocity = map(int, match.group(2).split(","))
+            acceleration = map(int, match.group(3).split(","))
+            result.append([sum(map(abs,acceleration)), position, velocity, acceleration, p_no])
         else:
             raise Exception("parse " + item)
         p_no += 1
@@ -23,7 +23,11 @@ input = [s.strip() for s in fh.readlines()]
 fh.close()
 particles = parse(input)
 
-#for p in particles: print p
+
+particles.sort(key=lambda x: x[0])
+for p in particles[0:10]: print p[4], p[0], sum(map(abs,p[1]))
+import sys
+sys.exit(1)
 
 cycle=0
 while True:
